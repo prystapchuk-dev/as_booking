@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBenefitTypesTable extends Migration
+class CreateBenefitOffer extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateBenefitTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('benefit_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255)->unique();
-            $table->timestamps();
+        Schema::create('benefit_offer', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Benefit::class);
+            $table->foreignIdFor(\App\Models\Offer::class);
         });
     }
 
@@ -27,6 +26,6 @@ class CreateBenefitTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('benefit_types');
+        Schema::dropIfExists('benefit_offer');
     }
 }

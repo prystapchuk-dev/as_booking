@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreOfferRequest extends FormRequest
 {
@@ -21,13 +22,22 @@ class StoreOfferRequest extends FormRequest
      *
      * @return array
      */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => Auth::guard('partner')->id(),
+        ]);
+    }
+
+
     public function rules()
     {
         return [
             'title' => ['required', 'string', 'unique:offers', 'min:5', 'max:255'],
             'description' => ['string', 'nullable'],
             'price' => ['required', 'numeric'],
-            'benefits' => ['required']
+            'benefits' => ['required'],
+            'user_id' => ['required', 'numeric'],
         ];
     }
 }

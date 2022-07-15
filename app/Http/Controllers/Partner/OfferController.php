@@ -30,9 +30,11 @@ class OfferController extends Controller
      */
     public function create()
     {
-        $benefits_list = BenefitType::all();
 
-        return view('partner.create_offer', compact('benefits_list'));
+        $offer = Offer::find(1);
+        $benefits_list = Benefit::all();
+
+        return view('partner.create_offer', compact('benefits_list', 'offer'));
     }
 
     /**
@@ -43,20 +45,13 @@ class OfferController extends Controller
      */
     public function store(StoreOfferRequest $request)
     {
+
         $data = $request->validated();
+        //dd($data);
+        $offer = Offer::create($data);
 
+        $offer->attachBenefits($data['benefits']);
 
-        $offer = Offer::create([
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'price' => $data['price'],
-            'user_id' => Auth::guard('partner')->id()
-        ]);
-
-        Benefit::cre
-
-
-        dd($offer->id);
     }
 
     /**

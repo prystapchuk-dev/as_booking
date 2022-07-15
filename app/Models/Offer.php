@@ -17,4 +17,14 @@ class Offer extends Model
     ];
 
     protected $table = 'offers';
+
+    public function benefits()
+    {
+        return $this->belongsToMany(Benefit::class);
+    }
+
+    public function attachBenefits($benefits)
+    {
+        $this->benefits()->attach($benefits);
+    }
 }

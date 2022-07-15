@@ -17,9 +17,9 @@ class PartnerSeeder extends Seeder
     public function run()
     {
         DB::table('partners')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@gmail.com',
-            'password' => Hash::make('password'),
+            'name' =>  'demo',
+            'email' => 'demo@gmail.com',
+            'password' => Hash::make('demo'),
         ]);
     }
 }

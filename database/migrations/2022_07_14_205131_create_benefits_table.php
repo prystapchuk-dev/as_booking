@@ -17,8 +17,8 @@ class CreateBenefitsTable extends Migration
     {
         Schema::create('benefits', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(BenefitType::class);
-            $table->foreignIdFor(Offer::class);
+            $table->string('name', 255)->unique();
+            $table->timestamps();
         });
     }
 

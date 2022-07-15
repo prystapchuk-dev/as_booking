@@ -7,7 +7,6 @@
             Додати помешкання
         </x-slot>
     </x-partner-account-header>
-
     <div class="container mx-auto">
         @if ($errors->any())
             <div class="alert alert-danger">
