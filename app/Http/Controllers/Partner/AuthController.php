@@ -21,7 +21,7 @@ class AuthController extends Controller
         $user = $request->validated();
 
         if (Auth::guard('partner')->attempt($user)) {
-            return view('account');
+            return redirect()->route('offers.index');
             //$request->session()->regenerate();
         }
 

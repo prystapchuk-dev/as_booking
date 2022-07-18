@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Offer;
 
-class CreateBenefitOffer extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +14,16 @@ class CreateBenefitOffer extends Migration
      */
     public function up()
     {
-        Schema::create('benefit_offer', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('offer_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\Benefit::class);
+
+            $table->string('path');
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -29,6 +31,6 @@ class CreateBenefitOffer extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('benefit_offer');
+        Schema::dropIfExists('images');
     }
 }

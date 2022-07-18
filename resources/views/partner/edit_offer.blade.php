@@ -17,9 +17,9 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('offers.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('offers.update', $offer) }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            @method('PATCH')
         <div class="mt-4">
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="mt-5 md:mt-0 md:col-span-2">
@@ -29,7 +29,7 @@
                                     <div class="col-span-3 sm:col-span-2">
                                         <div class="col-span-6 sm:col-span-3">
                                             <label for="title" class="block text-sm font-medium text-gray-700">Назва</label>
-                                            <input type="text" name="title" id="title" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                            <input type="text" name="title" id="title" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $offer->title }}">
                                         </div>
                                     </div>
                                 </div>
@@ -37,7 +37,8 @@
                                 <div>
                                     <label for="description" class="block text-sm font-medium text-gray-700">Опис</label>
                                     <div class="mt-1">
-                                        <textarea id="description" name="description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder=""></textarea>
+                                        <textarea id="description" name="description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="">{{ $offer->description }}
+                                        </textarea>
                                     </div>
                                     <p class="mt-2 text-sm text-gray-500">Якомога детальніше опишіть ваше житло</p>
                                 </div>
@@ -76,6 +77,7 @@
                 </div>
             </div>
         </div>
+
         <div class="hidden sm:block" aria-hidden="true">
             <div class="py-5">
                 <h4 class="text-xl">Адреса</h4>
@@ -92,7 +94,7 @@
                                 <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                                         <label for="city" class="block text-sm font-medium text-gray-700">Місто</label>
-                                        <input type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <input type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $offer->city }}">
                                     </div>
 
                                     <div class="col-span-6">
@@ -121,7 +123,7 @@
                                 <div class="flex-col space-y-4">
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="price" class="block text-sm font-medium text-gray-700">Ціна</label>
-                                        <input type="text" name="price" id="price" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <input type="text" name="price" id="price" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $offer->price }}">
                                     </div>
                                     <div class="flex items-start">
                                         <div class="flex items-center h-5">
@@ -147,24 +149,22 @@
 
         <div class="mt-10 sm:mt-0">
             <div class="md:grid md:grid-cols-3 md:gap-6">
-
                 <div class="mt-5 md:mt-0 md:col-span-2">
                         <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                 <fieldset>
                                     <div class="mt-4 space-y-4">
 
-                                        @foreach($benefits_list as $benefit_item)
-                                        <div class="flex items-start">
-                                            <div class="flex items-center h-5">
-                                                <input id="{{ $benefit_item->id }}" name="benefits[]" value="{{ $benefit_item->id }}" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                        @foreach($benefits_list as $benefit)
+                                            <div class="flex items-start">
+                                                <div class="flex items-center h-5">
+                                                    <input id="{{ $benefit->id }}" {{ in_array($benefit->id, $checked_benefit_list->toArray()) ? 'checked' : '' }}   name="benefits[]" value="{{ $benefit->id }}" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                    <div class="ml-3 text-sm">
+                                                        <label for="{{ $benefit->id }}" class="font-medium text-gray-700">{{ $benefit->name }}</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="ml-3 text-sm">
-                                                <label for="{{ $benefit_item->id }}" class="font-medium text-gray-700">{{ $benefit_item->name }}</label>
-                                            </div>
-                                        </div>
                                         @endforeach
-
                                     </div>
                                 </fieldset>
                             </div>

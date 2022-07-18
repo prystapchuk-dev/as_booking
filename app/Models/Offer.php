@@ -14,6 +14,7 @@ class Offer extends Model
         'description',
         'price',
         'user_id',
+        'city'
     ];
 
     protected $table = 'offers';
@@ -23,8 +24,18 @@ class Offer extends Model
         return $this->belongsToMany(Benefit::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
     public function attachBenefits($benefits)
     {
         $this->benefits()->attach($benefits);
+    }
+
+    public function attachImages($images)
+    {
+        $this->images()->attach($images);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Partner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfferRequest;
 use App\Models\Benefit;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateOfferRequest;
 use App\Models\Offer;
@@ -20,7 +21,9 @@ class OfferController extends Controller
      */
     public function index()
     {
-        //
+        $offers = Offer::with('images', 'benefits')->get();
+
+        return view('offers', compact('offers'));
     }
 
     /**
@@ -45,12 +48,20 @@ class OfferController extends Controller
      */
     public function store(StoreOfferRequest $request)
     {
-
         $data = $request->validated();
-        //dd($data);
+
         $offer = Offer::create($data);
 
+        foreach ($data['images'] as $image) {
+           $path = $image->store('offers/images', 'public');
+           $hash = sha1_file($image->getRealPath());
+
+           $offer->images()->save(new Image(['path' => $path, 'hash' => $hash]));
+        }
+
         $offer->attachBenefits($data['benefits']);
+
+        return redirect()->route('offers.index');
 
     }
 
@@ -73,7 +84,14 @@ class OfferController extends Controller
      */
     public function edit(Offer $offer)
     {
-        //
+        $benefits_list = Benefit::all();
+        $checked_benefit_list = $offer->benefits()->pluck('id');
+
+        return view('partner.edit_offer', compact(
+            'offer',
+            'benefits_list',
+                      'checked_benefit_list',
+        ));
     }
 
     /**
@@ -85,7 +103,27 @@ class OfferController extends Controller
      */
     public function update(UpdateOfferRequest $request, Offer $offer)
     {
-        //
+        $data = $request->validated();
+        //dd($offer->images()->pluck('hash'));
+        $hash_collect = $offer->images()->pluck('hash');
+
+        foreach ($data['images'] as $image ) {
+            if (!$hash_collect->contains(sha1_file($image->getRealPath()))){
+            $path = $image->store('offers/images', 'public');
+            $hash = sha1_file($image->getRealPath());
+            $offer->images()->save(new Image(['path' => $path, 'hash' => $hash]));
+            }
+        }
+
+        $offer->update($data);
+
+        $current_benefits = $offer->benefits()->pluck('id');
+        $new_benefits = collect($data['benefits']);
+
+
+        $offer->attachBenefits($new_benefits->diff($current_benefits));
+
+        return redirect()->route('offers.index');
     }
 
     /**
@@ -96,6 +134,10 @@ class OfferController extends Controller
      */
     public function destroy(Offer $offer)
     {
-        //
+
+        $offer->delete();
+
+        return redirect()->route('offers.index');
+
     }
 }

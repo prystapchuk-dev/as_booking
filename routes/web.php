@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('/offers/search', [\App\Http\Controllers\User\SearchAutocompleteController::class, 'query'])->name('image.upload');
+
 Route::get('/', function () {
     return view('home');
 });

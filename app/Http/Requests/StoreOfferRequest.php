@@ -33,11 +33,13 @@ class StoreOfferRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'unique:offers', 'min:5', 'max:255'],
-            'description' => ['string', 'nullable'],
-            'price' => ['required', 'numeric'],
-            'benefits' => ['required'],
-            'user_id' => ['required', 'numeric'],
+            'title'         => ['required', 'string', 'unique:offers', 'min:5', 'max:255'],
+            'description'   => ['string', 'nullable'],
+            'price'         => ['required', 'numeric'],
+            'benefits'      => ['required'],
+            'user_id'       => ['required', 'numeric'],
+            'images.*'      => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'city'          => ['required', 'string'],
         ];
     }
 }

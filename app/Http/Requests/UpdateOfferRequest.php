@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateOfferRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateOfferRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +22,15 @@ class UpdateOfferRequest extends FormRequest
      *
      * @return array
      */
+
     public function rules()
     {
         return [
-            //
+            'title'         => ['required', 'string', 'unique:offers', 'min:5', 'max:255'],
+            'description'   => ['string', 'nullable'],
+            'price'         => ['required', 'numeric'],
+            'benefits'      => ['required'],
+            'images.*'      => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
         ];
     }
 }
